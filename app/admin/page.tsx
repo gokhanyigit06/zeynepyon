@@ -11,7 +11,7 @@ export default function AdminLogin() {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         // Simple hardcoded password for demonstration
-        if (password === "admin123") {
+        if (password === "troy2026") {
             document.cookie = "admin_auth=true; path=/";
             router.push("/admin/dashboard");
         } else {
@@ -50,9 +50,6 @@ export default function AdminLogin() {
                         </button>
                     </div>
                 </form>
-                <div className="text-center mt-4">
-                    <p className="text-xs text-gray-400">Default password: <strong>admin123</strong></p>
-                </div>
             </div>
         </div>
     );
