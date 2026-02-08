@@ -31,7 +31,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans text-stone-900 bg-white dark:bg-stone-950 dark:text-stone-50 transition-colors duration-300 flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans text-stone-900 bg-white transition-colors duration-300 flex flex-col min-h-screen`}
       >
         <Header logoText={branding?.logoText} logoUrl={branding?.logoUrl} menuItems={branding?.menuItems} />
         <main className="pt-24 flex-grow px-6 max-w-7xl mx-auto w-full">
