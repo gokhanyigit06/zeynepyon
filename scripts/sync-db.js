@@ -17,13 +17,28 @@ https.get(API_URL, (res) => {
     let rawData = '';
     res.setEncoding('utf8');
     res.on('data', (chunk) => { rawData += chunk; });
-    res.on('end', () => {
+    res.on('end', async () => {
         try {
             const parsedData = JSON.parse(rawData);
-            fs.writeFileSync(DATA_FILE, JSON.stringify(parsedData, null, 2));
-            console.log('✅ Successfully synced data to data/site-data.json');
+
+            // Connect to Local DB
+            const { Pool } = require('pg');
+            const pool = new Pool({
+                connectionString: process.env.DATABASE_URL || "postgresql://user:password@localhost:5434/zeynep_db",
+            });
+
+            console.log('💾 Inserting/Updating data into Local PostgreSQL...');
+            const client = await pool.connect();
+            await client.query(
+                'INSERT INTO key_value_store (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value',
+                ['site_data', parsedData]
+            );
+
+            client.release();
+            await pool.end();
+            console.log('✅ Successfully synced data from Live Site to Local PostgreSQL');
         } catch (e) {
-            console.error('❌ Error parsing JSON: ' + e.message);
+            console.error('❌ Error syncing data: ' + e.message);
         }
     });
 }).on('error', (e) => {
