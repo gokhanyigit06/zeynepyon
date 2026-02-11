@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { tracks as defaultTracks, AudioTrack } from "@/data/tracks";
-import Image from "next/image";
+// import Image from "next/image"; // Removed in favor of FallbackImage
+import FallbackImage from "./FallbackImage"; // Import new component
 
 interface AudioListProps {
     tracks?: AudioTrack[];
@@ -69,11 +70,12 @@ export default function AudioList({ tracks = defaultTracks }: AudioListProps) {
                     >
                         {/* Left Image */}
                         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow-sm mr-6">
-                            <Image
+                            <FallbackImage
                                 src={track.imageUrl}
                                 alt={track.title}
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                fallbackSrc="https://placehold.co/100?text=Audio"
                             />
                             {/* Overlay for active track */}
                             {currentTrack?.id === track.id && isPlaying && (
@@ -121,7 +123,13 @@ export default function AudioList({ tracks = defaultTracks }: AudioListProps) {
                     <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <div className="relative w-12 h-12 rounded overflow-hidden hidden sm:block">
-                                <Image src={currentTrack.imageUrl} alt={currentTrack.title} fill className="object-cover" />
+                                <FallbackImage
+                                    src={currentTrack.imageUrl}
+                                    alt={currentTrack.title}
+                                    fill
+                                    className="object-cover"
+                                    fallbackSrc="https://placehold.co/100?text=Playing"
+                                />
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold text-gray-900">{currentTrack.title}</h4>
