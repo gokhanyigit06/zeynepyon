@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import FallbackImage from "./FallbackImage"; // Updated import
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -60,12 +60,13 @@ export default function Hero({ data }: { data: any }) {
             {/* Right Image */}
             <div className="flex-1 w-full flex justify-center md:justify-end">
                 <div className="relative w-full max-w-[500px] aspect-square rounded-[2rem] overflow-hidden bg-gray-200 shadow-2xl transform hover:scale-[1.01] transition-transform duration-500 group">
-                    <Image
+                    <FallbackImage
                         src={data.imageUrl}
                         alt={data.title}
                         fill
                         className="object-cover"
                         priority
+                        fallbackSrc="https://placehold.co/800x800?text=Hero"
                     />
                 </div>
             </div>

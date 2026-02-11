@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image"; // Removed in favor of FallbackImage
+import FallbackImage from "@/components/FallbackImage"; // Import new component
 import AudioList from "@/components/AudioList";
 import Hero from "@/components/Hero";
 import { getSiteData } from "@/lib/db";
@@ -31,11 +32,12 @@ export default async function Home() {
             {/* Book Cover */}
             <div className="relative group perspective-1000">
               <div className="relative w-[300px] h-[450px] shadow-[20px_20px_40px_rgba(0,0,0,0.3)] transform rotate-y-[-10deg] md:group-hover:rotate-y-0 transition-transform duration-500 ease-out">
-                <Image
+                <FallbackImage
                   src={book.coverUrl}
                   alt={book.title}
                   fill
                   className="object-cover rounded-r-xl rounded-l-sm"
+                  fallbackSrc="https://placehold.co/300x450?text=Book+Cover"
                 />
               </div>
             </div>
