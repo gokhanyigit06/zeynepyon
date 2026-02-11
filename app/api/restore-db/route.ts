@@ -33,6 +33,13 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, message: "Data restored successfully" });
     } catch (e: any) {
         console.error("Restore error:", e);
-        return NextResponse.json({ error: e.message || "Internal Error" }, { status: 500 });
+        // Debug: reveal the host being attempted
+        const dbUrl = process.env.DATABASE_URL || "NOT_SET";
+        const maskedUrl = dbUrl.length > 10 ? dbUrl.substring(0, 10) + "..." : dbUrl;
+        return NextResponse.json({
+            error: e.message || "Internal Error",
+            debug_url: maskedUrl,
+            debug_env: process.env.NODE_ENV
+        }, { status: 500 });
     }
 }
