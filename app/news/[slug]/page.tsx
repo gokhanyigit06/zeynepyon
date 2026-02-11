@@ -49,6 +49,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     // Helper to get slug for nav links
     const getSlug = (a: any) => a.slug || slugify(a.title);
 
+    // Prepare content: use article.content, or fallback to excerpt if content is missing
+    let displayContent = article.content;
+    if (!displayContent && article.excerpt) {
+        // Simple formatter for plain text excerpt: wrap lines in <p>
+        displayContent = article.excerpt
+            .split('\n')
+            .filter((line: string) => line.trim() !== '')
+            .map((line: string) => `<p>${line}</p>`)
+            .join('');
+    }
+
     return (
         <article className="min-h-screen bg-white pb-20 pt-10">
             {/* Main Content Wrapper */}
@@ -76,7 +87,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 {/* Article Body */}
                 <div
                     className="prose prose-lg prose-stone max-w-none text-gray-700 leading-relaxed font-sans"
-                    dangerouslySetInnerHTML={{ __html: article.content || "" }}
+                    dangerouslySetInnerHTML={{ __html: displayContent || "" }}
                 />
 
                 {/* Navigation Footer */}
