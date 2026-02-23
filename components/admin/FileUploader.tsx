@@ -53,7 +53,7 @@ export default function FileUploader({ label, value, onChange, accept = "image/*
                                 <audio src={value} controls className="w-full h-8" />
                             </div>
                         ) : (
-                            <Image src={value} alt="Preview" fill className="object-cover" />
+                            <Image src={value} alt="Preview" fill className="object-cover" unoptimized />
                         )}
 
                         <button

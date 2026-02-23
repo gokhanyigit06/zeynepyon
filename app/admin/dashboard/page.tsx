@@ -357,7 +357,7 @@ function NewsManager({ articles, onSave, loading }: { articles: any[], onSave: (
                         {articles.map((article: any) => (
                             <li key={article.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
                                 <div className="flex items-center gap-4">
-                                    {article.imageUrl && <div className="w-12 h-12 relative rounded overflow-hidden bg-gray-100"><Image src={article.imageUrl} alt="" fill className="object-cover" /></div>}
+                                    {article.imageUrl && <div className="w-12 h-12 relative rounded overflow-hidden bg-gray-100"><Image src={article.imageUrl} alt="" fill className="object-cover" unoptimized /></div>}
                                     <div>
                                         <h4 className="text-sm font-medium text-gray-900">{article.title}</h4>
                                         <p className="text-xs text-gray-500 truncate max-w-xs">{article.slug}</p>

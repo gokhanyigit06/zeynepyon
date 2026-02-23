@@ -19,12 +19,15 @@ export default function FallbackImage({
         setImgSrc(src);
     }, [src]);
 
+    const isLocalUpload = typeof imgSrc === 'string' && imgSrc.startsWith('/uploads');
+
     return (
         <Image
             {...props}
             alt={alt}
             src={imgSrc || fallbackSrc}
             onError={() => setImgSrc(fallbackSrc)}
+            unoptimized={isLocalUpload || props.unoptimized}
         />
     );
 }
