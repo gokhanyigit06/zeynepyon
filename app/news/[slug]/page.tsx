@@ -49,16 +49,26 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     // Helper to get slug for nav links
     const getSlug = (a: any) => a.slug || slugify(a.title);
 
+    // Helper to auto-link URLs in text
+    const autoLink = (text: string) => {
+        const urlRegex = /(https?:\/\/[^\s<]+)/g;
+        return text.replace(urlRegex, (url) => {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-amber-600 hover:text-amber-700 underline decoration-amber-200 hover:decoration-amber-500 transition-all">${url}</a>`;
+        });
+    };
+
     // Prepare content: use article.content, or fallback to excerpt if content is missing
-    let displayContent = article.content;
+    let displayContent = article.content || "";
     if (!displayContent && article.excerpt) {
-        // Simple formatter for plain text excerpt: wrap lines in <p>
         displayContent = article.excerpt
             .split('\n')
             .filter((line: string) => line.trim() !== '')
             .map((line: string) => `<p>${line}</p>`)
             .join('');
     }
+
+    // Apply auto-linking
+    displayContent = autoLink(displayContent);
 
     return (
         <article className="min-h-screen bg-white pb-20 pt-10">
