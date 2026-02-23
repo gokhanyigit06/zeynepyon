@@ -73,12 +73,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 </div>
 
                 {/* Featured Image */}
-                <div className="relative w-full aspect-[16/10] mb-16 rounded-[2rem] overflow-hidden shadow-sm">
+                <div className="w-full mb-16 rounded-[2rem] overflow-hidden shadow-sm bg-stone-50">
                     <FallbackImage
                         src={article.imageUrl}
                         alt={article.title}
-                        fill
-                        className="object-cover"
+                        width={1200}
+                        height={800}
+                        className="w-full h-auto block"
                         priority
                         fallbackSrc="https://placehold.co/800x500?text=Article"
                     />
