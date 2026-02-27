@@ -8,8 +8,10 @@ import { getSiteData } from "@/lib/db";
 export const dynamic = 'force-dynamic'; // Ensure fresh data on every request
 
 export default async function Home() {
-  const data = await getSiteData();
-  const { hero, book, testimonials } = data;
+  const data = await getSiteData() || {};
+  const hero = data.hero || {};
+  const book = data.book || {};
+  const testimonials = data.testimonials || [];
 
   return (
     <div className="pb-20">
