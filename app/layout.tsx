@@ -25,7 +25,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const data = await getSiteData();
+  let data: any = {};
+  try {
+    data = await getSiteData();
+  } catch (err) {
+    console.error("RootLayout getSiteData error:", err);
+  }
   const { branding } = data;
 
   return (
