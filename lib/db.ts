@@ -1,4 +1,6 @@
 import { query } from './pg-db';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
 export async function getSiteData() {
     // Try to fetch from DB
@@ -8,11 +10,18 @@ export async function getSiteData() {
             return res.rows[0].value;
         }
     } catch (e) {
-        console.warn("DB connecting warning in getSiteData: Database may be offline, using fallback defaults.");
+        console.warn("DB connecting warning in getSiteData: Database may be offline, falling back to local file.");
     }
 
-    // Fallback: return empty object or error, but for now let's hope migration worked.
-    return {};
+    // Fallback: try reading from live_data.json file if DB fails or is empty
+    try {
+        const filePath = join(process.cwd(), 'live_data.json');
+        const fileContent = await readFile(filePath, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (fallbackError) {
+        console.error("Fallback Failed: Could not read live_data.json", fallbackError);
+        return {};
+    }
 }
 
 export async function updateSiteData(newData: any) {

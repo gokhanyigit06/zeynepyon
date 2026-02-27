@@ -24,7 +24,7 @@ export default function FallbackImage({
     return (
         <Image
             {...props}
-            alt={alt}
+            alt={alt || "Image"}
             src={imgSrc || fallbackSrc}
             onError={() => setImgSrc(fallbackSrc)}
             unoptimized={isLocalUpload || props.unoptimized}
