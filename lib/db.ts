@@ -8,7 +8,7 @@ export async function getSiteData() {
             return res.rows[0].value;
         }
     } catch (e) {
-        console.error("DB Error in getSiteData:", e);
+        console.warn("DB connecting warning in getSiteData: Database may be offline, using fallback defaults.");
     }
 
     // Fallback: return empty object or error, but for now let's hope migration worked.

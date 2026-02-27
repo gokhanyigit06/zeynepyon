@@ -12,6 +12,11 @@ export const pool =
         connectionString,
     });
 
+// Prevent Node.js from crashing when an idle client or connection attempt fails (AggregateError)
+pool.on('error', (err) => {
+    console.error('Unexpected error on idle pg client:', err.message);
+});
+
 if (process.env.NODE_ENV !== "production") globalForPg.pool = pool;
 
 export async function query(text: string, params?: any[]) {

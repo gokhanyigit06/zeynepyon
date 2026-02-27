@@ -29,7 +29,7 @@ export default async function RootLayout({
   try {
     data = await getSiteData();
   } catch (err) {
-    console.error("RootLayout getSiteData error:", err);
+    console.warn("RootLayout getSiteData error: DB offline over fallback.");
   }
   const { branding } = data;
 
