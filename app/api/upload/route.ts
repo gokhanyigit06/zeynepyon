@@ -14,11 +14,18 @@ export async function POST(request: Request) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Save with original name, or timestamp to avoid collisions
-        const fileName = `${Date.now()}-${file.name}`;
+        if (buffer.length === 0) {
+            return NextResponse.json({ error: 'File is empty' }, { status: 400 });
+        }
+
+        // Save with timestamp and sanitize filename
+        const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-').replace(/-+/g, '-');
+        const fileName = `${Date.now()}-${safeName}`;
         const path = join(process.cwd(), 'public', 'uploads', fileName);
 
         await writeFile(path, buffer);
+
+        console.log(`Uploaded file: ${fileName} (${buffer.length} bytes)`);
 
         return NextResponse.json({ url: `/uploads/${fileName}` });
     } catch (error) {
