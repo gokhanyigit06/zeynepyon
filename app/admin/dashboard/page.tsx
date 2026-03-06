@@ -6,6 +6,7 @@ import useSWR from "swr";
 import Image from "next/image";
 import { Edit, Trash2, Mic, ShoppingBag, Plus, X } from "lucide-react";
 import FileUploader from "@/components/admin/FileUploader";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 const tabs = ["Settings", "Hero", "Book", "News", "Testimonials", "Audio", "Footer", "Contact"];
 
@@ -332,9 +333,17 @@ function NewsManager({ articles, onSave, loading }: { articles: any[], onSave: (
                 <input placeholder="Slug (e.g. my-article)" value={formData.slug} onChange={e => setFormData({ ...formData, slug: e.target.value })} className="w-full border p-2 rounded" />
                 <textarea placeholder="Excerpt" value={formData.excerpt} onChange={e => setFormData({ ...formData, excerpt: e.target.value })} className="w-full border p-2 rounded" rows={2} />
                 <FileUploader label="Featured Image" value={formData.imageUrl} onChange={url => setFormData({ ...formData, imageUrl: url })} />
-                <textarea placeholder="HTML Content (use <p> tags)" value={formData.content} onChange={e => setFormData({ ...formData, content: e.target.value })} className="w-full border p-2 rounded font-mono text-xs" rows={10} />
 
-                <div className="flex gap-2">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                    <RichTextEditor
+                        content={formData.content}
+                        onChange={content => setFormData({ ...formData, content })}
+                        placeholder="Write your article content here..."
+                    />
+                </div>
+
+                <div className="flex gap-2 pt-4">
                     <button onClick={handleFormSave} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Save</button>
                     <button onClick={() => setEditingId(null)} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
                 </div>

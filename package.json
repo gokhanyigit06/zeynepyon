@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@prisma/client": "5.19.1",
+    "@tiptap/extension-link": "^3.20.1",
+    "@tiptap/extension-underline": "^3.20.1",
+    "@tiptap/react": "^3.20.1",
+    "@tiptap/starter-kit": "^3.20.1",
     "@types/pg": "^8.16.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.33.0",

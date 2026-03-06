@@ -49,14 +49,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     // Helper to get slug for nav links
     const getSlug = (a: any) => a.slug || slugify(a.title);
 
-    // Helper to auto-link URLs in text
-    const autoLink = (text: string) => {
-        const urlRegex = /(https?:\/\/[^\s<]+)/g;
-        return text.replace(urlRegex, (url) => {
-            return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-amber-600 hover:text-amber-700 underline decoration-amber-200 hover:decoration-amber-500 transition-all">${url}</a>`;
-        });
-    };
-
     // Prepare content: use article.content, or fallback to excerpt if content is missing
     let displayContent = article.content || "";
     if (!displayContent && article.excerpt) {
@@ -66,9 +58,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             .map((line: string) => `<p>${line}</p>`)
             .join('');
     }
-
-    // Apply auto-linking
-    displayContent = autoLink(displayContent);
 
     return (
         <article className="min-h-screen bg-white pb-20 pt-10">
@@ -97,7 +86,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
                 {/* Article Body */}
                 <div
-                    className="prose prose-lg prose-stone max-w-none text-gray-700 leading-relaxed font-sans"
+                    className="prose prose-lg prose-stone max-w-none text-gray-700 leading-relaxed font-sans 
+                    prose-headings:font-serif prose-headings:text-black
+                    prose-a:text-amber-600 prose-a:no-underline hover:prose-a:underline
+                    prose-blockquote:border-l-amber-500 prose-blockquote:bg-stone-50 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-lg"
                     dangerouslySetInnerHTML={{ __html: displayContent || "" }}
                 />
 
