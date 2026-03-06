@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
+import Image from '@tiptap/extension-image';
 import {
     Bold,
     Italic,
@@ -18,8 +19,10 @@ import {
     Heading2,
     Heading3,
     Strikethrough,
-    Underline as UnderlineIcon
+    Underline as UnderlineIcon,
+    Image as ImageIcon
 } from 'lucide-react';
+import { useRef } from 'react';
 
 interface RichTextEditorProps {
     content: string;
@@ -55,6 +58,8 @@ const MenuButton = ({
 );
 
 export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -67,6 +72,11 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                 openOnClick: false,
                 HTMLAttributes: {
                     class: 'text-amber-600 underline',
+                },
+            }),
+            Image.configure({
+                HTMLAttributes: {
+                    class: 'max-w-full h-auto rounded-lg shadow-sm my-4',
                 },
             }),
         ],
@@ -102,8 +112,47 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
     };
 
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                editor.chain().focus().setImage({ src: data.url }).run();
+            } else {
+                alert('Image upload failed');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            alert('Error uploading image');
+        }
+
+        // Reset input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     return (
         <div className="w-full border rounded-lg bg-white overflow-hidden focus-within:ring-2 focus-within:ring-amber-500 focus-within:border-amber-500 transition-all">
+            {/* Hidden Input for Images */}
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="hidden"
+            />
+
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b">
                 <MenuButton
@@ -191,6 +240,13 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                     title="Insert Link"
                 >
                     <LinkIcon size={18} />
+                </MenuButton>
+
+                <MenuButton
+                    onClick={() => fileInputRef.current?.click()}
+                    title="Insert Image"
+                >
+                    <ImageIcon size={18} />
                 </MenuButton>
 
                 <div className="flex-1" />
